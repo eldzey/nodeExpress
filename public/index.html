@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talent Application Form</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --p50: #EEEDFE; --p100: #CECBF6; --p200: #AFA9EC;
+      --p400: #7F77DD; --p600: #534AB7; --p800: #3C3489; --p900: #26215C;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f4f3fb;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      color: #1a1a2e;
+    }
+
+    .card {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #e2e0f5;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(83,74,183,0.08);
+    }
+
+    /* ── Header ── */
+    .card-header {
+      background: var(--p900);
+      padding: 2rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-header::before {
+      content: ''; position: absolute;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: var(--p800); top: -70px; right: -50px; opacity: .5;
+    }
+    .card-header::after {
+      content: ''; position: absolute;
+      width: 130px; height: 130px; border-radius: 50%;
+      background: var(--p600); bottom: -40px; left: 60px; opacity: .3;
+    }
+    .hbadge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--p600); color: var(--p100);
+      font-size: 11px; font-weight: 500; letter-spacing: .08em;
+      text-transform: uppercase; padding: 5px 12px;
+      border-radius: 20px; margin-bottom: 1rem;
+      position: relative; z-index: 1;
+    }
+    .hdot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #7FDD99; animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+    .card-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px; font-weight: 600; color: #fff;
+      line-height: 1.2; position: relative; z-index: 1; margin-bottom: .4rem;
+    }
+    .card-header p { color: var(--p200); font-size: 14px; font-weight: 300; position: relative; z-index: 1; }
+
+    /* ── Steps bar ── */
+    .steps-bar {
+      display: flex; align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid #ede9fb;
+    }
+    .step-item { display: flex; align-items: center; flex: 1; }
+    .sc {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; flex-shrink: 0;
+      transition: all .3s; border: 2px solid #d0cce8;
+      color: #888; background: #fff;
+    }
+    .sc.active { background: var(--p600); border-color: var(--p600); color: #fff; }
+    .sc.done   { background: var(--p400); border-color: var(--p400); color: #fff; }
+    .sl { font-size: 11px; color: #999; margin-left: 7px; white-space: nowrap; }
+    .sl.active { color: var(--p600); font-weight: 500; }
+    .sl.done   { color: var(--p400); }
+    .sline { flex: 1; height: 1px; background: #e0ddf5; margin: 0 8px; }
+    .sline.done { background: var(--p400); }
+
+    /* ── Form body ── */
+    .fb { padding: 2rem 2.5rem; }
+    .stitle {
+      font-size: 12px; font-weight: 500; color: var(--p600);
+      text-transform: uppercase; letter-spacing: .09em;
+      margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;
+    }
+    .stitle::after { content: ''; flex: 1; height: 1px; background: var(--p100); }
+    .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .fg.full { grid-template-columns: 1fr; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 12px; font-weight: 500; color: #666; letter-spacing: .03em; }
+    .req { color: var(--p600); margin-left: 2px; }
+
+    input[type=text], input[type=email], input[type=tel], select, textarea {
+      width: 100%; padding: 10px 14px;
+      border-radius: 8px; border: 1px solid #d8d5f0;
+      background: #fff; color: #1a1a2e;
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      transition: border-color .2s, box-shadow .2s; outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--p400);
+      box-shadow: 0 0 0 3px rgba(127,119,221,.15);
+    }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
+    }
+
+    /* ── Skill chips ── */
+    .skills-wrap {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 10px; border-radius: 8px;
+      border: 1px solid #d8d5f0; min-height: 50px; background: #fff;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; background: var(--p50); color: var(--p800);
+      border-radius: 20px; font-size: 12px; font-weight: 500;
+      cursor: pointer; border: 1px solid var(--p200);
+      transition: all .15s; user-select: none;
+    }
+    .chip.sel { background: var(--p600); color: #fff; border-color: var(--p600); }
+    .chip:hover:not(.sel) { background: var(--p100); }
+
+    /* ── Range slider ── */
+    .rw { display: flex; flex-direction: column; gap: 6px; }
+    .rl { display: flex; justify-content: space-between; font-size: 11px; color: #999; }
+    .rv { font-size: 13px; font-weight: 500; color: var(--p600); text-align: center; }
+    input[type=range] {
+      -webkit-appearance: none; height: 4px; background: var(--p100);
+      border-radius: 4px; border: none; padding: 0; box-shadow: none; width: 100%;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 18px; height: 18px;
+      border-radius: 50%; background: var(--p600); cursor: pointer;
+      border: 2px solid #fff; box-shadow: 0 0 0 1px var(--p400);
+    }
+
+    /* ── Radio pills ── */
+    .rg { display: flex; gap: 8px; flex-wrap: wrap; }
+    .rp {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 20px;
+      border: 1px solid #d8d5f0; font-size: 13px;
+      cursor: pointer; transition: all .15s; color: #444; background: #fff;
+    }
+    .rp input { display: none; }
+    .rp.ck { background: var(--p50); border-color: var(--p400); color: var(--p800); font-weight: 500; }
+    .rdot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #ccc; flex-shrink: 0; }
+    .rp.ck .rdot { background: var(--p600); border-color: var(--p600); }
+
+    /* ── Misc ── */
+    .divider { height: 1px; background: #ede9fb; margin: 1.5rem 0; }
+    .cc { font-size: 11px; color: #aaa; text-align: right; }
+
+    /* ── Actions ── */
+    .actions {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #ede9fb;
+    }
+    .btn-s {
+      padding: 10px 20px; border-radius: 8px;
+      border: 1px solid #d8d5f0; background: transparent; color: #666;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer;
+    }
+    .btn-s:hover { background: #f5f3fe; }
+    .btn-p {
+      padding: 10px 28px; border-radius: 8px; border: none;
+      background: var(--p600); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: all .15s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-p:hover { background: var(--p800); }
+    .btn-p:active { transform: scale(.98); }
+    .btn-p:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* ── Spinner ── */
+    .spin {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: sp .7s linear infinite;
+    }
+    @keyframes sp { to { transform: rotate(360deg); } }
+
+    /* ── Feedback banners ── */
+    .banner {
+      border-radius: 8px; padding: 12px 14px;
+      font-size: 13px; display: flex; align-items: center; gap: 8px; margin-top: 1rem;
+    }
+    .banner.ok  { background: #eaf3de; border: 1px solid #97C459; color: #3B6D11; }
+    .banner.err { background: #FCEBEB; border: 1px solid #F09595; color: #A32D2D; }
+
+    /* ── Review table ── */
+    .rtable { width: 100%; border-collapse: collapse; }
+    .rtable td { padding: 7px 0; font-size: 13px; vertical-align: top; }
+    .rtable td:first-child { font-size: 12px; font-weight: 500; color: #888; width: 36%; }
+    .rtable td:last-child  { color: #1a1a2e; }
+
+    /* ── Success view ── */
+    .sv { text-align: center; padding: 3rem 2rem; }
+    .sicon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--p50); border: 2px solid var(--p400);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem; font-size: 28px; color: var(--p600);
+    }
+    .sv h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--p800); margin-bottom: .75rem; }
+    .sv p  { font-size: 14px; color: #666; line-height: 1.7; max-width: 340px; margin: 0 auto 1.5rem; }
+    .ref   {
+      display: inline-block; background: var(--p100); color: var(--p800);
+      font-family: monospace; font-size: 15px;
+      padding: 8px 18px; border-radius: 8px; letter-spacing: .1em;
+    }
+
+    /* ── Utilities ── */
+    .hidden    { display: none !important; }
+    .fade-in   { animation: fi .35s ease; }
+    @keyframes fi { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Header -->
+  <div class="card-header">
+    <div class="hbadge"><div class="hdot"></div>Now accepting applications</div>
+    <h1>Talent Application Form</h1>
+    <p>Your profile is saved directly to our MongoDB talent database</p>
+  </div>
+
+  <!-- Steps bar -->
+  <div class="steps-bar">
+    <div class="step-item"><div class="sc active" id="s1">1</div><span class="sl active" id="sl1">Personal</span></div>
+    <div class="sline" id="line1"></div>
+    <div class="step-item"><div class="sc" id="s2">2</div><span class="sl" id="sl2">Skills</span></div>
+    <div class="sline" id="line2"></div>
+    <div class="step-item"><div class="sc" id="s3">3</div><span class="sl" id="sl3">Preferences</span></div>
+    <div class="sline" id="line3"></div>
+    <div class="step-item"><div class="sc" id="s4">4</div><span class="sl" id="sl4">Review</span></div>
+  </div>
+
+  <!-- ── Step 1: Personal ── -->
+  <div class="fb fade-in" id="step1">
+    <div class="stitle">Personal information</div>
+    <div class="fg">
+      <div class="field"><label>First name <span class="req">*</span></label><input type="text" id="firstName" placeholder="Maria" /></div>
+      <div class="field"><label>Last name <span class="req">*</span></label><input type="text" id="lastName" placeholder="Santos" /></div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Email address <span class="req">*</span></label><input type="email" id="email" placeholder="maria@example.com" /></div>
+      <div class="field"><label>Phone number</label><input type="tel" id="phone" placeholder="+63 912 345 6789" /></div>
+    </div>
+    <div class="divider"></div>
+    <div class="stitle">About you</div>
+    <div class="fg full">
+      <div class="field">
+        <label>Professional summary <span class="req">*</span></label>
+        <textarea id="summary" placeholder="Briefly describe your background and what you excel at…" maxlength="500" oninput="document.getElementById('sc1').textContent=this.value.length+'/500'"></textarea>
+        <div class="cc" id="sc1">0/500</div>
+      </div>
+    </div>
+    <div class="actions">
+      <span style="font-size:12px;color:#aaa;"><i class="ti ti-shield-lock"></i> Encrypted &amp; secure</span>
+      <button class="btn-p" onclick="goStep(2)">Continue <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- ── Step 2: Skills ── -->
+  <div class="fb fade-in hidden" id="step2">
+    <div class="stitle">Technical skills</div>
+    <div class="fg full">
+      <div class="field">
+        <label>Select your skills (pick all that apply)</label>
+        <div class="skills-wrap" id="skillsWrap"></div>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Primary role <span class="req">*</span></label>
+        <select id="role">
+          <option value="">Select a role…</option>
+          <option>Frontend Developer</option><option>Backend Developer</option>
+          <option>Full Stack Developer</option><option>Mobile Developer</option>
+          <option>DevOps / Cloud Engineer</option><option>Data Scientist</option>
+          <option>ML / AI Engineer</option><option>UI/UX Designer</option>
+          <option>Product Manager</option><option>QA Engineer</option>
+        </select>
+      </div>
+      <div class="field"><label>Years of experience <span class="req">*</span></label>
+        <select id="years">
+          <option value="">Select…</option>
+          <option>Less than 1 year</option><option>1–2 years</option>
+          <option>3–5 years</option><option>6–9 years</option><option>10+ years</option>
+        </select>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="stitle">Proficiency</div>
+    <div class="fg full">
+      <div class="field">
+        <label>Overall technical proficiency</label>
+        <div class="rw">
+          <div class="rv" id="profVal">Intermediate (5)</div>
+          <input type="range" min="1" max="10" value="5" step="1" id="proficiency" oninput="updateProf(this.value)" />
+          <div class="rl"><span>Beginner</span><span>Expert</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-s" onclick="goStep(1)"><i class="ti ti-arrow-left"></i> Back</button>
+      <button class="btn-p" onclick="goStep(3)">Continue <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- ── Step 3: Preferences ── -->
+  <div class="fb fade-in hidden" id="step3">
+    <div class="stitle">Work preferences</div>
+    <div class="fg full">
+      <div class="field"><label>Work arrangement</label>
+        <div class="rg">
+          <label class="rp ck" onclick="selR('arrangement',this)"><input type="radio" name="arrangement" value="Remote" checked /><div class="rdot"></div>Remote</label>
+          <label class="rp" onclick="selR('arrangement',this)"><input type="radio" name="arrangement" value="Hybrid" /><div class="rdot"></div>Hybrid</label>
+          <label class="rp" onclick="selR('arrangement',this)"><input type="radio" name="arrangement" value="On-site" /><div class="rdot"></div>On-site</label>
+        </div>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Employment type</label>
+        <div class="rg">
+          <label class="rp ck" onclick="selR('emptype',this)"><input type="radio" name="emptype" value="Full-time" checked /><div class="rdot"></div>Full-time</label>
+          <label class="rp" onclick="selR('emptype',this)"><input type="radio" name="emptype" value="Part-time" /><div class="rdot"></div>Part-time</label>
+          <label class="rp" onclick="selR('emptype',this)"><input type="radio" name="emptype" value="Contract" /><div class="rdot"></div>Contract</label>
+        </div>
+      </div>
+      <div class="field"><label>Availability</label>
+        <select id="availability">
+          <option>Immediately</option><option>Within 2 weeks</option>
+          <option>Within 1 month</option><option>2–3 months</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="field"><label>Expected monthly salary (USD)</label><input type="text" id="salary" placeholder="e.g. 3,000 – 5,000" /></div>
+      <div class="field"><label>Preferred industry</label>
+        <select id="industry">
+          <option value="">Any</option><option>Technology / SaaS</option><option>Fintech</option>
+          <option>Healthcare</option><option>E-commerce</option><option>Gaming</option>
+          <option>Education</option><option>Media &amp; Entertainment</option><option>Government / NGO</option>
+        </select>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="fg full">
+      <div class="field">
+        <label>Additional notes</label>
+        <textarea id="notes" placeholder="Anything else you'd like hiring managers to know…" maxlength="300" oninput="document.getElementById('sc2').textContent=this.value.length+'/300'"></textarea>
+        <div class="cc" id="sc2">0/300</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-s" onclick="goStep(2)"><i class="ti ti-arrow-left"></i> Back</button>
+      <button class="btn-p" onclick="goStep(4)">Review application <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- ── Step 4: Review & Submit ── -->
+  <div class="fb fade-in hidden" id="step4">
+    <div class="stitle">Review your application</div>
+    <div id="reviewContent"></div>
+    <div id="feedbackBlock"></div>
+    <div class="actions">
+      <button class="btn-s" onclick="goStep(3)" id="backBtn"><i class="ti ti-arrow-left"></i> Back</button>
+      <button class="btn-p" onclick="submitForm()" id="submitBtn"><i class="ti ti-send"></i> Submit application</button>
+    </div>
+  </div>
+
+  <!-- ── Success ── -->
+  <div class="fb fade-in hidden" id="stepSuccess">
+    <div class="sv">
+      <div class="sicon"><i class="ti ti-check"></i></div>
+      <h2>Application submitted!</h2>
+      <p>Your profile has been saved to our talent database. The team will reach out within 3–5 business days.</p>
+      <div class="ref" id="refCode">REF-000000</div>
+      <br /><br />
+      <button class="btn-p" style="margin: 0 auto; justify-content: center;" onclick="location.reload()">
+        Submit another <i class="ti ti-refresh"></i>
+      </button>
+    </div>
+  </div>
+
+</div><!-- /.card -->
+
+<script>
+  /*
+   * API_BASE uses a relative path so it works on:
+   *   - localhost:5000  (local dev — Express serves this file from /public)
+   *   - Render / any host (same origin, no hardcoded URL needed)
+   */
+  const API_BASE = '/api/talent';
+
+  const SKILLS = [
+    'JavaScript','TypeScript','Python','Java','Go','Rust','C#','PHP','Ruby',
+    'Swift','Kotlin','React','Vue','Angular','Next.js','Node.js','Django',
+    'FastAPI','Spring Boot','Laravel','PostgreSQL','MongoDB','Redis',
+    'GraphQL','REST APIs','Docker','Kubernetes','AWS','GCP','Azure',
+    'CI/CD','Git','Figma','Linux','Terraform'
+  ];
+
+  let selectedSkills = [];
+  let currentStep   = 1;
+
+  /* ── Init skills chips ── */
+  function initSkills() {
+    const wrap = document.getElementById('skillsWrap');
+    SKILLS.forEach(s => {
+      const c = document.createElement('div');
+      c.className = 'chip'; c.textContent = s;
+      c.onclick = () => {
+        if (selectedSkills.includes(s)) {
+          selectedSkills = selectedSkills.filter(x => x !== s);
+          c.classList.remove('sel');
+        } else {
+          selectedSkills.push(s);
+          c.classList.add('sel');
+        }
+      };
+      wrap.appendChild(c);
+    });
+  }
+
+  function updateProf(v) {
+    const L = ['','Novice','Beginner','Developing','Developing','Intermediate','Intermediate','Proficient','Proficient','Advanced','Expert'];
+    document.getElementById('profVal').textContent = L[v] + ' (' + v + ')';
+  }
+
+  function selR(name, el) {
+    document.querySelectorAll('[name=' + name + ']').forEach(r => r.closest('.rp').classList.remove('ck'));
+    el.classList.add('ck');
+  }
+
+  function goStep(n) {
+    document.getElementById('step' + currentStep).classList.add('hidden');
+    if (n === 4) buildReview();
+    document.getElementById('step' + n).classList.remove('hidden');
+    document.getElementById('step' + n).classList.add('fade-in');
+    updateBar(n);
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateBar(n) {
+    for (let i = 1; i <= 4; i++) {
+      const c = document.getElementById('s' + i), l = document.getElementById('sl' + i);
+      c.classList.remove('active','done'); l.classList.remove('active','done');
+      if (i < n)       { c.classList.add('done'); c.innerHTML = '<i class="ti ti-check" style="font-size:11px"></i>'; l.classList.add('done'); }
+      else if (i === n){ c.classList.add('active'); c.textContent = i; l.classList.add('active'); }
+      else             { c.textContent = i; }
+      if (i < 4) document.getElementById('line' + i).classList.toggle('done', i < n);
+    }
+  }
+
+  function buildReview() {
+    const rows = [
+      ['Name',        (document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value).trim() || '—'],
+      ['Email',        document.getElementById('email').value || '—'],
+      ['Phone',        document.getElementById('phone').value || '—'],
+      ['Role',         document.getElementById('role').value || '—'],
+      ['Experience',   document.getElementById('years').value || '—'],
+      ['Skills',       selectedSkills.length ? selectedSkills.join(', ') : '—'],
+      ['Proficiency',  document.getElementById('proficiency').value + '/10'],
+      ['Arrangement',  document.querySelector('[name=arrangement]:checked')?.value || '—'],
+      ['Employment',   document.querySelector('[name=emptype]:checked')?.value || '—'],
+      ['Availability', document.getElementById('availability').value],
+      ['Salary',       document.getElementById('salary').value || '—'],
+      ['Industry',     document.getElementById('industry').value || 'Any'],
+    ];
+    const sum = document.getElementById('summary').value;
+    let html = '<table class="rtable">';
+    rows.forEach(([k, v]) => { html += '<tr><td>' + k + '</td><td>' + v + '</td></tr>'; });
+    html += '</table>';
+    if (sum) html += '<div style="margin-top:1rem;padding:12px;background:#f5f3fe;border-radius:8px;font-size:13px;line-height:1.7;color:#1a1a2e;">' + sum + '</div>';
+    document.getElementById('reviewContent').innerHTML = html;
+    document.getElementById('feedbackBlock').innerHTML = '';
+  }
+
+  function buildPayload() {
+    return {
+      applicant: {
+        first_name: document.getElementById('firstName').value.trim(),
+        last_name:  document.getElementById('lastName').value.trim(),
+        email:      document.getElementById('email').value.trim(),
+        phone:      document.getElementById('phone').value.trim(),
+        summary:    document.getElementById('summary').value.trim(),
+      },
+      skills: {
+        selected:          selectedSkills,
+        primary_role:      document.getElementById('role').value,
+        years_experience:  document.getElementById('years').value,
+        proficiency_score: parseInt(document.getElementById('proficiency').value),
+      },
+      preferences: {
+        work_arrangement:   document.querySelector('[name=arrangement]:checked')?.value,
+        employment_type:    document.querySelector('[name=emptype]:checked')?.value,
+        availability:       document.getElementById('availability').value,
+        expected_salary:    document.getElementById('salary').value.trim(),
+        preferred_industry: document.getElementById('industry').value,
+        notes:              document.getElementById('notes').value.trim(),
+      },
+      meta: {
+        ref:          'REF-' + Math.floor(100000 + Math.random() * 900000),
+        form_version: '1.0.0',
+        submitted_at: new Date().toISOString(),
+      },
+    };
+  }
+
+  async function submitForm() {
+    const fb  = document.getElementById('feedbackBlock');
+    const btn = document.getElementById('submitBtn');
+    const bk  = document.getElementById('backBtn');
+    fb.innerHTML = '';
+
+    // Client-side validation
+    const payload = buildPayload();
+    if (!payload.applicant.first_name || !payload.applicant.last_name || !payload.applicant.email) {
+      fb.innerHTML = '<div class="banner err"><i class="ti ti-alert-circle"></i> Please fill in your first name, last name, and email.</div>';
+      return;
+    }
+    if (!payload.skills.primary_role || !payload.skills.years_experience) {
+      fb.innerHTML = '<div class="banner err"><i class="ti ti-alert-circle"></i> Please go back and select your role and years of experience.</div>';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spin"></div> Submitting…';
+    bk.disabled  = true;
+
+    try {
+      const res  = await fetch(API_BASE + '/apply', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        document.getElementById('step4').classList.add('hidden');
+        document.getElementById('stepSuccess').classList.remove('hidden');
+        document.getElementById('refCode').textContent = data.ref || payload.meta.ref;
+      } else {
+        fb.innerHTML = '<div class="banner err"><i class="ti ti-alert-circle"></i> ' + (data.message || 'Something went wrong. Please try again.') + '</div>';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ti ti-send"></i> Submit application';
+        bk.disabled  = false;
+      }
+    } catch (e) {
+      fb.innerHTML = '<div class="banner err"><i class="ti ti-alert-circle"></i> Could not connect to the server. Please try again.</div>';
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-send"></i> Submit application';
+      bk.disabled  = false;
+    }
+  }
+
+  initSkills();
+</script>
+</body>
+</html>

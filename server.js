@@ -5,49 +5,66 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
-const talentRoutes = require('./routes/talent');
-
 const app = express();
+
+/* ─────────────────────────────────────────────
+   Environment Variables
+───────────────────────────────────────────── */
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
+
+/* ─────────────────────────────────────────────
+   Debug: Print MONGO_URI
+───────────────────────────────────────────── */
+console.log('🔎 MONGO_URI from env:', MONGO_URI);
+
+if (!MONGO_URI) {
+  console.error('❌ MONGO_URI is missing in Render Environment Variables');
+  process.exit(1);
+}
 
 /* ─────────────────────────────────────────────
    Middleware
 ───────────────────────────────────────────── */
-app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
-
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 /* ─────────────────────────────────────────────
-   Serve Frontend Files
+   Static Files
 ───────────────────────────────────────────── */
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* ─────────────────────────────────────────────
-   API Routes
+   Routes
 ───────────────────────────────────────────── */
-app.use('/api/talent', talentRoutes);
+try {
+  const talentRoutes = require('./routes/talent');
+  app.use('/api/talent', talentRoutes);
+} catch (err) {
+  console.error('❌ Cannot load routes/talent.js');
+  console.error(err.message);
+}
 
 /* ─────────────────────────────────────────────
-   Health Check
+   Health Route
 ───────────────────────────────────────────── */
 app.get('/api/health', (req, res) => {
-  res.json({
+  res.status(200).json({
     success: true,
-    status: 'ok',
-    message: 'Talent Form API is running',
+    message: 'Server is running',
+    mongodb: mongoose.connection.readyState === 1
+      ? 'connected'
+      : 'disconnected',
     timestamp: new Date().toISOString(),
   });
 });
 
 /* ─────────────────────────────────────────────
-   Catch-All Route for Frontend
+   Homepage
 ───────────────────────────────────────────── */
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.get('/', (req, res) => {
+  res.send('Talent Form Backend Running');
 });
 
 /* ─────────────────────────────────────────────
@@ -61,30 +78,29 @@ app.use((req, res) => {
 });
 
 /* ─────────────────────────────────────────────
-   Global Error Handler
+   Error Handler
 ───────────────────────────────────────────── */
 app.use((err, req, res, next) => {
   console.error('❌ Server Error:', err);
 
   res.status(500).json({
     success: false,
-    message: 'Internal server error',
+    error: err.message,
   });
 });
 
 /* ─────────────────────────────────────────────
    MongoDB Connection
 ───────────────────────────────────────────── */
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(MONGO_URI, {
   serverSelectionTimeoutMS: 10000,
-  socketTimeoutMS: 45000,
 })
 .then(() => {
-  console.log('✅ MongoDB Connected Successfully');
+  console.log('✅ MongoDB Connected');
 
   app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📋 Health: http://localhost:${PORT}/api/health`);
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌐 http://localhost:${PORT}`);
   });
 })
 .catch((err) => {
